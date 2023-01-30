@@ -44,6 +44,18 @@ def rf_func(x, y, x_predict, y_label):
     return rf
 
 
+# knn
+def knn_func(x, y, x_predict, y_label):
+    print("knn...")
+    knn = KNeighborsRegressor()
+    knn.fit(x, y)
+    knn_predictions = knn.predict(x_predict)
+    print('============KNN Result============')
+    print_score(y_label, knn_predictions)
+
+    return knn
+
+
 # 7.评估模型结果指标
 def print_score(label, predictions):
     print('R2 score:', r2_score(label.ravel(), predictions))
@@ -55,18 +67,19 @@ def print_score(label, predictions):
 
 def plot_importance(model, x_label):
     importance = list(model.feature_importances_)
+    print(importance)
     feature_importance = [(feature, round(importance, 2)) for feature, importance in zip(x_label, importance)]
     # feature_importance = sorted(feature_importance, key=lambda x: x[1], reverse=True)
 
-    # [print('Variable:{:20} importance: {}'.format(*pair)) for pair in feature_importance]
+    [print('Variable:{:20} importance: {}'.format(*pair)) for pair in feature_importance]
 
     f, ax = plt.subplots(figsize=(10, 7))
     x_values = list(range(len(importance)))
 
     ax.bar(x_values, importance, orientation='vertical')
-    ax.set_xticks(x_values, x_label, rotation=40)
+    ax.set_xticks(x_values, x_label, rotation=40, fontsize=4.5)
     ax.set_ylabel('Importance')
-    ax.set_xlabel('Variable')
+    ax.set_xlabel('Variable', fontsize=8)
     ax.set_title('Variable Importance')
 
 
@@ -84,5 +97,6 @@ def modelling():
     mlp_func(x_train, y_train, x_test, y_test)
     dt_func(x_train, y_train, x_test, y_test)
     rf = rf_func(x_train, y_train, x_test, y_test)
+    knn_func(x_train, y_train, x_test, y_test)
 
     plot_importance(rf, selected_columns)
