@@ -28,7 +28,7 @@ def get_corr():
 
 # 3.特征工程
 # 4.数据拆分
-def get_data_split():
+def data_splint_with_feature_engineering():
     # 热编码方法对分类变量即位置和季节进行编码
     df_with_location_en = pd.get_dummies(df, columns=['Location'], drop_first=True)
     df_with_loc_season_en = pd.get_dummies(df_with_location_en, columns=['Season'], drop_first=True)
@@ -62,8 +62,27 @@ def get_data_split():
                         'Location_USAFA', 'Season_Spring', 'Season_Summer', 'Season_Winter',
                         'sine_mon', 'cos_mon', 'sine_hr', 'cos_hr']
 
-    df_processed = df_with_loc_season_en[selected_columns].reset_index(drop=True)
-    target_label = 'PolyPwr'
+    return get_data_split(df_with_loc_season_en, selected_columns, 'PolyPwr')
+
+
+def data_splint_without_feature_engineering():
+    # Model
+    df_with_location_en = pd.get_dummies(df, columns=['Location'], drop_first=True)
+    df_with_loc_season_en = pd.get_dummies(df_with_location_en, columns=['Season'], drop_first=True)
+
+    selected_columns = ['Latitude', 'Longitude', 'Altitude',
+                        'Month', 'Hour', 'Humidity', 'Temp',
+                        'Wind', 'Visibility', 'Pressure', 'Cloud', 'Location_Grissom',
+                        'Location_Hill Weber', 'Location_JDMT', 'Location_Kahului',
+                        'Location_MNANG', 'Location_Malmstrom', 'Location_March AFB',
+                        'Location_Offutt', 'Location_Peterson', 'Location_Travis',
+                        'Location_USAFA', 'Season_Spring', 'Season_Summer', 'Season_Winter', 'PolyPwr']
+
+    return get_data_split(df_with_loc_season_en, selected_columns, 'PolyPwr')
+
+
+def get_data_split(data_df, selected_columns, target_label):
+    df_processed = data_df[selected_columns].reset_index(drop=True)
     input_feat = list(set(selected_columns).difference({target_label}))
 
     df_x = df_processed[input_feat].reset_index(drop=True)

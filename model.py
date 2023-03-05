@@ -5,9 +5,11 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolu
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import BayesianRidge
+# from sklearn.naive_bayes import ComplementNB
 
 import matplotlib.pyplot as plt
-from data_process import get_data_split
+from data_process import data_splint_with_feature_engineering, data_splint_without_feature_engineering
 
 
 # 6.模型开发与比较（图表）
@@ -56,6 +58,18 @@ def knn_func(x, y, x_predict, y_label):
     return knn
 
 
+def nb_func(x, y, x_predict, y_label):
+    print("nb...")
+    gnb = BayesianRidge()
+    # gnb = ComplementNB()
+    gnb.fit(x, y)
+    gnb_predictions = gnb.predict(x_predict)
+    print('============GNB Result============')
+    print_score(y_label, gnb_predictions)
+
+    return gnb
+
+
 # 7.评估模型结果指标
 def print_score(label, predictions):
     print('R2 score:', r2_score(label.ravel(), predictions))
@@ -85,18 +99,16 @@ def plot_importance(model, x_label):
 
 def modelling():
     print("modelling...")
-    selected_columns = ['Latitude', 'Humidity', 'Temp', 'Wind',
-                        'Visibility', 'Pressure', 'Cloud', 'Location_Grissom',
-                        'Location_Hill Weber', 'Location_JDMT', 'Location_Kahului',
-                        'Location_MNANG', 'Location_Malmstrom', 'Location_March AFB',
-                        'Location_Offutt', 'Location_Peterson', 'Location_Travis',
-                        'Location_USAFA', 'Season_Spring', 'Season_Summer', 'Season_Winter',
-                        'sine_mon', 'cos_mon', 'sine_hr', 'cos_hr']
-    x_train, x_test, y_train, y_test = get_data_split()
+    x_train, x_test, y_train, y_test = data_splint_without_feature_engineering()
 
-    mlp_func(x_train, y_train, x_test, y_test)
-    dt_func(x_train, y_train, x_test, y_test)
+    # dt_func(x_train, y_train, x_test, y_test)
+    # knn_func(x_train, y_train, x_test, y_test)
+    # nb_func(x_train, y_train, x_test, y_test)
+    # mlp_func(x_train, y_train, x_test, y_test)
     rf = rf_func(x_train, y_train, x_test, y_test)
-    knn_func(x_train, y_train, x_test, y_test)
 
-    plot_importance(rf, selected_columns)
+    # plot_importance(rf, selected_columns)
+
+
+if __name__ == '__main__':
+    modelling()

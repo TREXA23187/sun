@@ -3,6 +3,7 @@ import pandas as pd
 from pyproj import CRS
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 CRS_4326 = CRS('epsg:4326')
 
@@ -67,11 +68,17 @@ def data_hist_plot():
     ax.hist(sun_data_df['PolyPwr'], bins=40, density=False, facecolor="tab:blue", edgecolor="tab:orange", alpha=0.7)
 
 
+def plot_is_null():
+    plt.figure(figsize=(12, 7))
+    sns.heatmap(sun_data_df.isnull(), cmap='viridis')
+    plt.title('Visualize missing values in datasets')
+
+
 def data_plot():
-    data_value_plot()
     data_hist_plot()
+    plot_is_null()
 
 
 if __name__ == '__main__':
-    data_hist_plot()
+    data_plot()
     plt.show()
