@@ -2,11 +2,20 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split
 
 data_path = 'sun_power_dataset.csv'
 
 df = pd.read_csv(data_path, keep_default_na=False)
+class_arr = []
+for i in df['PolyPwr']:
+    if i < 12:
+        class_arr.append(1)
+    elif i < 20:
+        class_arr.append(2)
+    else:
+        class_arr.append(3)
+df['power_class'] = pd.Series(class_arr)
 
 
 # 3.每个因素与功率输出之间的相关性
@@ -76,9 +85,9 @@ def data_splint_without_feature_engineering():
                         'Location_Hill Weber', 'Location_JDMT', 'Location_Kahului',
                         'Location_MNANG', 'Location_Malmstrom', 'Location_March AFB',
                         'Location_Offutt', 'Location_Peterson', 'Location_Travis',
-                        'Location_USAFA', 'Season_Spring', 'Season_Summer', 'Season_Winter', 'PolyPwr']
+                        'Location_USAFA', 'Season_Spring', 'Season_Summer', 'Season_Winter', 'power_class']
 
-    return get_data_split(df_with_loc_season_en, selected_columns, 'PolyPwr')
+    return get_data_split(df_with_loc_season_en, selected_columns, 'power_class')
 
 
 def get_data_split(data_df, selected_columns, target_label):
