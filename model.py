@@ -100,14 +100,29 @@ def plot_importance(model, x_label):
     ax.set_title('Variable Importance')
 
 
+def assemble(x_train, y_train, x_test, y_test):
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.metrics import accuracy_score
+
+    abc = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators=200)
+    abc.fit(x_train, y_train)
+
+    print(abc.__class__.__name__, '(DecisionStumps)')
+    y_pred = abc.predict(x_train)
+    print('\ttrain:', accuracy_score(y_train, y_pred))
+    y_pred = abc.predict(x_test)
+    print('\ttest:', accuracy_score(y_test, y_pred))
+
+
 def modelling():
     print("modelling...")
     x_train, x_test, y_train, y_test = data_splint_without_feature_engineering()
 
-    dt_func(x_train, y_train, x_test, y_test)
-    knn_func(x_train, y_train, x_test, y_test)
-    nb_func(x_train, y_train, x_test, y_test)
-    mlp_func(x_train, y_train, x_test, y_test)
+    # dt_func(x_train, y_train, x_test, y_test)
+    # knn_func(x_train, y_train, x_test, y_test)
+    # nb_func(x_train, y_train, x_test, y_test)
+    # mlp_func(x_train, y_train, x_test, y_test)
+    assemble(x_train, y_train, x_test, y_test)
     # rf = rf_func(x_train, y_train, x_test, y_test)
 
     # plot_importance(rf, selected_columns)
