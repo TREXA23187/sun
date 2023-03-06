@@ -4,9 +4,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolu
 from sklearn.model_selection import cross_val_score
 
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPRegressor, MLPClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import BayesianRidge
 from sklearn.naive_bayes import MultinomialNB, GaussianNB
 
 import matplotlib.pyplot as plt
@@ -114,19 +113,34 @@ def assemble(x_train, y_train, x_test, y_test):
     print('\ttest:', accuracy_score(y_test, y_pred))
 
 
-def modelling():
-    print("modelling...")
+def modelling_1():
+    print("modelling 1...")
     x_train, x_test, y_train, y_test = data_splint_without_feature_engineering()
 
     # dt_func(x_train, y_train, x_test, y_test)
     # knn_func(x_train, y_train, x_test, y_test)
     # nb_func(x_train, y_train, x_test, y_test)
-    # mlp_func(x_train, y_train, x_test, y_test)
-    assemble(x_train, y_train, x_test, y_test)
+    mlp_func(x_train, y_train, x_test, y_test)
+    # assemble(x_train, y_train, x_test, y_test)
+    # rf = rf_func(x_train, y_train, x_test, y_test)
+
+    # plot_importance(rf, selected_columns)
+
+
+def modelling_2():
+    print("modelling 2...")
+    x_train, x_test, y_train, y_test = data_splint_with_feature_engineering()
+
+    # dt_func(x_train, y_train, x_test, y_test)
+    # knn_func(x_train, y_train, x_test, y_test)
+    # nb_func(x_train, y_train, x_test, y_test)
+    mlp_func(x_train, y_train, x_test, y_test)
+    # assemble(x_train, y_train, x_test, y_test)
     # rf = rf_func(x_train, y_train, x_test, y_test)
 
     # plot_importance(rf, selected_columns)
 
 
 if __name__ == '__main__':
-    modelling()
+    modelling_1()
+    modelling_2()

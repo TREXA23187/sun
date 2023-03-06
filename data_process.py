@@ -9,12 +9,18 @@ data_path = 'sun_power_dataset.csv'
 df = pd.read_csv(data_path, keep_default_na=False)
 class_arr = []
 for i in df['PolyPwr']:
-    if i < 12:
+    if i < 8:
         class_arr.append(1)
-    elif i < 20:
+    elif i < 12:
         class_arr.append(2)
-    else:
+    elif i < 16:
         class_arr.append(3)
+    elif i < 20:
+        class_arr.append(4)
+    elif i < 24:
+        class_arr.append(5)
+    else:
+        class_arr.append(6)
 df['power_class'] = pd.Series(class_arr)
 
 
@@ -63,7 +69,7 @@ def data_splint_with_feature_engineering():
         (df_with_loc_season_en.delta_hr * np.pi / (max_hour_of_interest - min_hour_of_interest)))
 
     # Model
-    selected_columns = ['Latitude', 'Humidity', 'Temp', 'PolyPwr', 'Wind',
+    selected_columns = ['Latitude', 'Humidity', 'Temp', 'power_class', 'Wind',
                         'Visibility', 'Pressure', 'Cloud', 'Location_Grissom',
                         'Location_Hill Weber', 'Location_JDMT', 'Location_Kahului',
                         'Location_MNANG', 'Location_Malmstrom', 'Location_March AFB',
@@ -71,7 +77,7 @@ def data_splint_with_feature_engineering():
                         'Location_USAFA', 'Season_Spring', 'Season_Summer', 'Season_Winter',
                         'sine_mon', 'cos_mon', 'sine_hr', 'cos_hr']
 
-    return get_data_split(df_with_loc_season_en, selected_columns, 'PolyPwr')
+    return get_data_split(df_with_loc_season_en, selected_columns, 'power_class')
 
 
 def data_splint_without_feature_engineering():
