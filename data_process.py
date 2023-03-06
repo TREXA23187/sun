@@ -3,9 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 
 data_path = 'sun_power_dataset.csv'
 
+# TODO: liztion
 df = pd.read_csv(data_path, keep_default_na=False)
 class_arr = []
 for i in df['PolyPwr']:
@@ -102,6 +104,11 @@ def get_data_split(data_df, selected_columns, target_label):
 
     df_x = df_processed[input_feat].reset_index(drop=True)
     df_y = df_processed[target_label]
+
+    transfer = MinMaxScaler(feature_range=(0, 1))
+
+    # normalization
+    df_x = transfer.fit_transform(df_x)
 
     return train_test_split(df_x, df_y, test_size=0.2, random_state=42)
 

@@ -118,9 +118,9 @@ def modelling_1():
     x_train, x_test, y_train, y_test = data_splint_without_feature_engineering()
 
     # dt_func(x_train, y_train, x_test, y_test)
-    # knn_func(x_train, y_train, x_test, y_test)
-    # nb_func(x_train, y_train, x_test, y_test)
-    mlp_func(x_train, y_train, x_test, y_test)
+    knn_func(x_train, y_train, x_test, y_test)
+    nb_func(x_train, y_train, x_test, y_test)
+    # mlp_func(x_train, y_train, x_test, y_test)
     # assemble(x_train, y_train, x_test, y_test)
     # rf = rf_func(x_train, y_train, x_test, y_test)
 
@@ -132,9 +132,9 @@ def modelling_2():
     x_train, x_test, y_train, y_test = data_splint_with_feature_engineering()
 
     # dt_func(x_train, y_train, x_test, y_test)
-    # knn_func(x_train, y_train, x_test, y_test)
-    # nb_func(x_train, y_train, x_test, y_test)
-    mlp_func(x_train, y_train, x_test, y_test)
+    knn_func(x_train, y_train, x_test, y_test)
+    nb_func(x_train, y_train, x_test, y_test)
+    # mlp_func(x_train, y_train, x_test, y_test)
     # assemble(x_train, y_train, x_test, y_test)
     # rf = rf_func(x_train, y_train, x_test, y_test)
 
