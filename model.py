@@ -7,6 +7,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import MultinomialNB, GaussianNB
+from sklearn.model_selection import GridSearchCV
+from sklearn.decomposition import PCA
 
 import matplotlib.pyplot as plt
 from data_process import data_splint_with_feature_engineering, data_splint_without_feature_engineering
@@ -48,9 +50,23 @@ def rf_func(x, y, x_predict, y_label):
 
 
 # knn
+
+# 寻找匹配的knn最优参数
+def knn_func_hyper_parameters_test(x, y):
+    param_grid = [{'weights': ["uniform", "distance"],
+                   'n_neighbors': range(1, 11),
+                   'metric': ['euclidean', 'manhattan', 'cosine']}]
+
+    knn_clf = KNeighborsClassifier()
+    grid_search = GridSearchCV(knn_clf, param_grid, cv=5, verbose=2)
+    grid_search.fit(x, y)
+    print(grid_search.best_estimator_)
+
+
 def knn_func(x, y, x_predict, y_label):
     print("knn...")
     knn = KNeighborsClassifier()
+    # knn = KNeighborsClassifier(metric='manhattan', n_neighbors=10, weights='distance')
     knn.fit(x, y)
     knn_predictions = knn.predict(x_predict)
     print('============KNN Result============')
@@ -74,7 +90,6 @@ def nb_func(x, y, x_predict, y_label):
 
 # 7.评估模型结果指标
 def print_score(label, predictions):
-    # print('R2 score:', r2_score(label.ravel(), predictions))
     print('Root mean square error', np.sqrt(mean_squared_error(label.ravel(), predictions)))
     print('Mean absolute error', mean_absolute_error(label.ravel(), predictions))
     print('MAPE:', mean_absolute_percentage_error(label.ravel(), predictions) * 100)
@@ -116,10 +131,20 @@ def assemble(x_train, y_train, x_test, y_test):
 def modelling_1():
     print("modelling 1...")
     x_train, x_test, y_train, y_test = data_splint_without_feature_engineering()
+    knn_func(x_train, y_train, x_test, y_test)
 
     # dt_func(x_train, y_train, x_test, y_test)
-    knn_func(x_train, y_train, x_test, y_test)
-    nb_func(x_train, y_train, x_test, y_test)
+    pca = PCA(0.9)
+    pca.fit(x_train)
+    x_train_reduction = pca.transform(x_train)
+
+    knn_clf = KNeighborsClassifier()
+    knn_clf.fit(x_train_reduction, y_train)
+    x_test_reduction = pca.transform(x_test)
+    print(knn_clf.score(x_test_reduction, y_test))
+
+    # knn_func(x_train_reduction, y_train, x_test, y_test)
+    # nb_func(x_train, y_train, x_test, y_test)
     # mlp_func(x_train, y_train, x_test, y_test)
     # assemble(x_train, y_train, x_test, y_test)
     # rf = rf_func(x_train, y_train, x_test, y_test)
@@ -131,10 +156,10 @@ def modelling_2():
     print("modelling 2...")
     x_train, x_test, y_train, y_test = data_splint_with_feature_engineering()
 
-    # dt_func(x_train, y_train, x_test, y_test)
+    dt_func(x_train, y_train, x_test, y_test)
     knn_func(x_train, y_train, x_test, y_test)
     nb_func(x_train, y_train, x_test, y_test)
-    # mlp_func(x_train, y_train, x_test, y_test)
+    mlp_func(x_train, y_train, x_test, y_test)
     # assemble(x_train, y_train, x_test, y_test)
     # rf = rf_func(x_train, y_train, x_test, y_test)
 
@@ -143,4 +168,6 @@ def modelling_2():
 
 if __name__ == '__main__':
     modelling_1()
-    modelling_2()
+    # modelling_2()
+
+    plt.show()

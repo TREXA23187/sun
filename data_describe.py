@@ -4,6 +4,7 @@ from pyproj import CRS
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from sklearn.decomposition import PCA
 
 CRS_4326 = CRS('epsg:4326')
 
@@ -74,11 +75,49 @@ def plot_is_null():
     plt.title('Visualize missing values in datasets')
 
 
+# pca部分
+def pca_plot():
+    attribute_list = ['Latitude', 'Longitude', 'Altitude',
+                      'Month', 'Hour', 'Humidity', 'Temp',
+                      'Wind', 'Visibility', 'Pressure', 'Cloud']
+    df_pca_0 = sun_data_df[attribute_list]
+    pca = PCA(n_components=11)
+    pca.fit_transform(df_pca_0)
+    ratio = pca.explained_variance_ratio_
+    # print(ratio)
+    plt.figure(figsize=(12, 7))
+    plt.bar(attribute_list, ratio)
+    plt.title('Ratio of attributes after PCA')
+
+    from sklearn.neighbors import NearestNeighbors
+    # pca = PCA(n_components=3)
+    # pca.fit(df_pca_0)
+    # pca_scale = pca.transform(df_pca_0)
+    # # print(pca_scale)
+    # pca_df = pd.DataFrame(pca_scale, columns=[f'pc{i}' for i in range(1, 4)])
+    # print(pca.explained_variance_ratio_)
+
+    # df_scale = df_pca_0
+    # pca = PCA(n_components=8)
+    # pca.fit(df_scale)
+    # variance = pca.explained_variance_ratio_
+    # var = np.cumsum(np.round(variance, 3) * 100)
+    # plt.figure(figsize=(12, 6))
+    # plt.ylabel('% Variance Explained')
+    # plt.xlabel('# of Features')
+    # plt.title('PCA Analysis')
+    # plt.ylim(0, 100.5)
+    # plt.plot(var)
+
+    plt.show()
+
 def data_plot():
     data_hist_plot()
     plot_is_null()
+    pca_plot()
 
 
 if __name__ == '__main__':
-    data_plot()
+    # data_plot()
+    pca_plot()
     plt.show()

@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 data_path = 'sun_power_dataset.csv'
 
-# TODO: liztion
+# TODO: normaliztion
 df = pd.read_csv(data_path, keep_default_na=False)
 class_arr = []
 for i in df['PolyPwr']:
